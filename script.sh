@@ -16,16 +16,19 @@ hostname="http://disney.rabbit-hole.ca:"
 
 function cleanup() {
   cd $fRoot && rm $fList $tList $cList
-  #kill -9 $serverPID 2>&1 >/dev/null
+  kill -9 $serverPID 2>&1 >/dev/null
 }
 
 function createPost() {
   cd $wRoot
   hostname="$hostname$port"
   npx hexo new post "Disney Movies"
-  while read l in $uList; do
-    for ((i=$(cat $uList | wc -l);i -ge 0;i--)); do
-   
+  # Pseudocode 
+  #while read l in $uList; do
+  #  for (( i="$(cat $uList | wc -l)";$i -gt 0;i=$i-1)); do
+  #     # work
+  #  done
+  #done 
 }
 
 
@@ -39,8 +42,8 @@ function serveFiles() {
   sed -i 's/m4v/.m4v/g' $uList && sed -i  's/mp4/.mp4/g' $uList \
   && sed -i  's/avi/.avi/g' $uList && sed -i 's/mkv/.mkv/g' $uList
   echo -e "\n\033[1;33mServing Files on port $port\033[0;37m"
-  #python2.7 -m SimpleHTTPServer  $port  2>&1 >/dev/null &
-  #serverPID=$!
+  python2.7 -m SimpleHTTPServer  $port  2>&1 >/dev/null &
+  serverPID=$!
 }
 
 function createList() {
@@ -64,10 +67,10 @@ main() {
 
   createList
   serveFiles
-#  createPost
+  createPost
   cleanup
-  #rm $fList $tList $cList
-  exit 1
+  
+  exit 0
 }
 
 main
